@@ -6,7 +6,7 @@ Vue.createApp({
       details: ['50% cotton', '30% wool', '20% polyester'],
       discount: '10%',
       image: 'assets/images/socks_blue.jpg',
-      inventory: 2,
+      inventory: 16,
       onSale: true,
       product: 'Socks',
       sizes: ['S', 'M', 'L'],
@@ -22,7 +22,8 @@ Vue.createApp({
       this.inventory -= 1;
     },
     emptyCart() {
-      this.inventory = 2;
+      // Reset the hardcoded value for a dev playground; there's no DB connected
+      this.inventory = 16;
       this.cart = 0;
     },
     getLastArrayElement(arrayToParse = []) {

@@ -1,5 +1,6 @@
 <!--
     https://www.vuemastery.com/courses/intro-to-vue-3/computed-properties-vue3
+    https://github.com/Code-Pop/Intro-to-Vue-3/tree/L8-start
 -->
 <!DOCTYPE html>
 <html lang="en-us">
@@ -8,6 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
     <link rel="stylesheet" href="assets/styles/style.css">
 
     <script src="https://unpkg.com/vue@next"></script>
@@ -49,7 +51,7 @@
                         <span v-if="detail != getLastArrayElement(details)"> | </span>
                     </span>
 
-                    <button class="button" :class="{disabledButton: !inventory || cart > inventory}" @click="addToCart" :disabled="!inventory || cart > inventory">Add to Cart</button>
+                    <button class="button" :class="{disabledButton: !inventory}" @click="addToCart" :disabled="!inventory">Add to Cart</button>
                 </div>
             </div>
         </div>
