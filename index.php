@@ -25,36 +25,12 @@
             <button @click="removeFromCart()">Remove from Cart</button>
             <button @click="emptyCart()">Empty Cart</button>
         </div>
-
-        <div class="product-display">
-            <div class="product-container">
-                <div class="product-image">
-                    <img :class="{'out-of-stock-img': !inStock}" :src="variants[selectedVariant].image" :alt="description">
-                </div>
-                <div class="product-info">
-                    <h1>{{ title }}{{ saleListing }}</h1>
-
-                    <p v-if="inStock > 10">In stock</p>
-                    <p v-else-if="inStock > 0">Only {{ inStock }} left!</p>
-                    <p v-else>Out of stock</p>
-
-                    <div v-for="(size, index) in sizes" :key="index">{{ size }}</div>
-
-                    <div class="color-circle" v-for="(variant, index) in variants" :key="variant.id" :title="variant.color" @mouseover="updateVariant(index)" :style="{backgroundColor: variant.color}"></div>
-
-                    <p>{{ description }}</p>
-
-                    <span v-for="detail in details">
-                        {{ detail }}
-                        <span v-if="detail != getLastArrayElement(details)"> | </span>
-                    </span>
-
-                    <button class="button" :class="{disabledButton: !inStock}" @click="addToCart" :disabled="!inStock">Add to Cart</button>
-                </div>
-            </div>
-        </div>
+        <product-display :premium="premium"></product-display>
     </section>
 
     <script src="assets/scripts/main.js"></script>
+    <script src="components/ProductDisplay.js"></script>
+
+    <script>app.mount('#app');</script>
 </body>
 </html>
