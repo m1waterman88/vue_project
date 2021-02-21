@@ -27,7 +27,7 @@
         <product-display :premium="premium" :shipping="shipping" @add-to-cart="addToCart" @remove-from-cart="removeFromCart"></product-display>
     </section>
 
-    <script src="assets/scripts/main.js"></script>
+    <script src="main.js"></script>
     <script src="components/ProductDisplay.js"></script>
 
     <script>app.mount('#app');</script>
