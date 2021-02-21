@@ -21,11 +21,10 @@
         <nav class="nav-bar"></nav>
 
         <div class="cart">
-            Cart ({{ cart }})<br>
-            <button @click="removeFromCart()">Remove from Cart</button>
+            Cart ({{ cart.length }})<br>
             <button @click="emptyCart()">Empty Cart</button>
         </div>
-        <product-display :premium="premium"></product-display>
+        <product-display :premium="premium" :shipping="shipping" @add-to-cart="addToCart" @remove-from-cart="removeFromCart"></product-display>
     </section>
 
     <script src="assets/scripts/main.js"></script>

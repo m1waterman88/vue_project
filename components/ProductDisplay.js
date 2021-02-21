@@ -3,6 +3,10 @@ app.component('product-display', {
     premium: {
       required: true,
       type: Boolean
+    },
+    shipping: {
+      required: true,
+      type: Number
     }
   },
   template:
@@ -13,17 +17,18 @@ app.component('product-display', {
               <img :class="{'out-of-stock-img': !inStock}" :src="variants[selectedVariant].image" :alt="description">
           </div>
           <div class="product-info">
-              <h1>{{ title }}{{ saleListing }}</h1>
+              <h1>{{ title }}</h1>
 
               <p v-if="inStock > 10">In stock</p>
               <p v-else-if="inStock > 0">Only {{ inStock }} left!</p>
               <p v-else>Out of stock</p>
 
-              <p>Shipping: {{ shipping }}</p>
+              <p class="sale">{{ saleListing }}</p>
+              <p>{{ '$' + currentPrice }} + {{ shippingCost }} shipping</p>
 
-              <div v-for="(size, index) in sizes" :key="index">{{ size }}</div>
-
-              <div class="color-circle" v-for="(variant, index) in variants" :key="variant.id" :title="variant.color" @mouseover="updateVariant(index)" :style="{backgroundColor: variant.color}"></div>
+              <div class="color-flex">
+                <div class="color-circle" v-for="(variant, index) in variants" :key="variant.id" :title="variant.color" @mouseover="updateVariant(index)" :style="{backgroundColor: variant.color}"></div>
+              </div>
 
               <p>{{ description }}</p>
 
@@ -33,6 +38,8 @@ app.component('product-display', {
               </span>
 
               <button class="button" :class="{disabledButton: !inStock}" @click="addToCart" :disabled="!inStock">Add to Cart</button>
+
+              <button class="button" :class="{disabledButton: !inStock}" @click="removeFromCart()" :disabled="!inStock">Remove from Cart</button>
           </div>
       </div>
     </div>
@@ -41,51 +48,44 @@ app.component('product-display', {
     return {
       brand: 'Vue Mastery',
       details: ['50% cotton', '30% wool', '20% polyester'],
-      discount: '10%',
+      discount: 10,
       product: 'Socks',
       selectedVariant: 0,
-      sizes: ['S', 'M', 'L'],
       variants: [
-        {id: 2234, color: 'blue', image: 'assets/images/socks_blue.jpg', inventory: 2, onSale: false},
-        {id: 2235, color: 'green', image: 'assets/images/socks_green.jpg', inventory: 16, onSale: true},
+        {id: 2234, color: 'blue', image: 'assets/images/socks_blue.jpg', inventory: 2, onSale: false, price: 7.99},
+        {id: 2235, color: 'green', image: 'assets/images/socks_green.jpg', inventory: 16, onSale: true, price: 7.99},
       ],
     }
   },
   methods: {
     addToCart() {
-      this.cart += 1;
-      this.variants[this.selectedVariant].inventory -= 1;
-    },
-    emptyCart() {
-      // No DB connected: reset the hardcoded values for a dev playground
-      this.variants[0].inventory = 2;
-      this.variants[1].inventory = 16;
-      this.cart = 0;
+      this.$emit('add-to-cart', this.variants[this.selectedVariant].id)
     },
     getLastArrayElement(arrayToParse = []) {
-      if (!arrayToParse) return null;
+      if (!arrayToParse) {
+        return null;
+      }
+
       return arrayToParse[arrayToParse.length - 1];
     },
     removeFromCart() {
-      if (this.cart > 0) {
-        // Check hardcoded maximums so there aren't negative product inventories
-        if ((this.selectedVariant === 0
-              && this.variants[0].inventory === 2)
-            || (this.selectedVariant === 1
-              && this.variants[1].inventory === 16)) {
-          return false;
-        }
-
-        this.cart -= 1;
-        this.variants[this.selectedVariant].inventory += 1;
-      }
+      this.$emit('remove-from-cart', this.variants[this.selectedVariant].id)
     },
     updateVariant(index) {
       this.selectedVariant = index;
-    },
+    }
   },
   // Performance boost since the value is cached
   computed: {
+    currentPrice() {
+      if (this.variants[this.selectedVariant].onSale) {
+        const regularPrice = this.variants[this.selectedVariant].price;
+
+        return (regularPrice - (regularPrice * (this.discount / 100))).toFixed(2);
+      }
+
+      return this.variants[this.selectedVariant].price;
+    },
     description() {
       return `Long ${this.title} socks for warm feet`;
     },
@@ -95,16 +95,18 @@ app.component('product-display', {
     inStock() {
       return this.variants[this.selectedVariant].inventory;
     },
-    title() {
-      return `${this.brand} ${this.product}`;
-    },
     saleListing() {
       if (this.variants[this.selectedVariant].onSale) {
-        return ` - ${this.discount} off!`;
+        return `Save ${this.discount}%!`;
       }
+
+      return 'Great value!';
     },
-    shipping() {
-      return this.premium ? 'Free' : '$2.99';
+    shippingCost() {
+      return this.premium ? 'Free' : `$${this.shipping}`;
     },
+    title() {
+      return `${this.brand} ${this.product}`;
+    }
   }
 });
