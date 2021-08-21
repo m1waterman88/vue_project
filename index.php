@@ -1,5 +1,5 @@
 <!--
-    https://www.vuemastery.com/courses/intro-to-vue-3/computed-properties-vue3
+    https://www.vuemastery.com/courses/intro-to-vue-3/forms-and-v-model-vue3
     https://github.com/Code-Pop/Intro-to-Vue-3/tree/L8-start
 -->
 <!DOCTYPE html>
@@ -29,6 +29,7 @@
 
     <script src="main.js"></script>
     <script src="components/ProductDisplay.js"></script>
+    <script src="components/ReviewForm.js"></script>
 
     <script>app.mount('#app');</script>
 </body>
